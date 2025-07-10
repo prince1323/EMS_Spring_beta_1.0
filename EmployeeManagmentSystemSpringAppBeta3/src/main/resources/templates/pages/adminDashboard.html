@@ -1,0 +1,349 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Employee Management Admin Panel - Hamburger Menu</title>
+<style>
+:root {
+	--sidebar-width: 15rem;
+	--hamburger-size: 2rem;
+	--gap: 0.5rem;
+	--header-font: 1.5rem;
+	--text-font: 1rem;
+	--padding: 1.5rem;
+	--transition-speed: 0.3s;
+}
+
+* {
+	box-sizing: border-box;
+	margin: 0;
+	padding: 0;
+	font-family: Arial, sans-serif;
+}
+
+body {
+	display: flex;
+	min-height: 100vh;
+	background-color: #f4f7fa;
+	color: #333;
+	overflow-x: hidden;
+}
+
+.hamburger {
+	position: fixed;
+	top: 2vh;
+	left: 2vw;
+	width: var(--hamburger-size);
+	height: calc(var(--hamburger-size)* 0.8);
+	cursor: pointer;
+	z-index: 1100;
+	display: flex;
+	flex-direction: column;
+	justify-content: space-between;
+}
+
+.hamburger div {
+	height: 0.3rem;
+	background-color: #ffffff;
+	border-radius: 0.2rem;
+	transition: all var(--transition-speed) ease;
+}
+
+.hamburger div:nth-child(1) {
+	transform: rotate(45deg) translate(0.5rem, 0.5rem);
+}
+
+.hamburger div:nth-child(2) {
+	opacity: 0;
+}
+
+.hamburger div:nth-child(3) {
+	transform: rotate(-45deg) translate(0.4rem, -0.4rem);
+}
+
+
+.hamburger.active div:nth-child(1) {
+    transform: rotate(0) translate(0, 0);
+    background-color: black;
+}
+
+.hamburger.active div:nth-child(2) {
+	opacity: 1;
+    background-color: black;
+}
+
+.hamburger.active div:nth-child(3) {
+     transform: rotate(0) translate(0, 0);
+    background-color: black;
+}
+
+
+.sidebar {
+	position: fixed;
+	left: calc(-1 * var(--sidebar-width));
+	top: 0;
+	width: var(--sidebar-width);
+	height: 100vh;
+	background-color: #2f4050;
+	color: #fff;
+	display: flex;
+	flex-direction: column;
+	padding: var(--padding) 0;
+	transition: left var(--transition-speed) ease;
+	z-index: 1000;
+	box-shadow: 0.2rem 0 0.5rem rgba(0, 0, 0, 0.2);
+}
+
+.sidebar.open {
+	left: 0;
+}
+
+.sidebar h2 {
+	text-align: center;
+	margin-bottom: 2rem;
+	font-weight: 700;
+	font-size: var(--header-font);
+	letter-spacing: 0.1rem;
+	padding-top: 2rem;
+}
+
+.sidebar nav a {
+	display: block;
+	padding: 0.8rem 2rem;
+	color: #cfd8dc;
+	text-decoration: none;
+	font-weight: 600;
+	font-size: var(--text-font);
+	transition: background-color var(--transition-speed), color
+		var(--transition-speed);
+}
+
+.sidebar nav a:hover, .sidebar nav a.active {
+	background-color: #1abc9c;
+	color: white;
+}
+
+.main-content {
+	margin-left: 0;
+	padding: var(--padding);
+	flex: 1;
+	background-color: #fff;
+	min-height: 100vh;
+	transition: margin-left var(--transition-speed) ease;
+	width: 100%;
+	 padding-top: 3rem;
+}
+
+/* ************ */
+.dashboard-cards {
+	display: grid;
+	grid-template-columns: repeat(auto-fit, minmax(12rem, 1fr));
+	gap: 1.5rem;
+	padding: 2rem;
+	background-color: #a1a5ae;
+	border-radius: 1rem;
+	box-shadow: 0 0.3rem 1rem rgba(0, 0, 0, 0.05);
+	margin: 2rem 0;
+}
+
+.dashboard-cards .card {
+	background-color: #ffffff;
+	color: #333333;
+	padding: 1.5rem;
+	border-radius: 0.75rem;
+	text-align: center;
+	border: 1px solid #e0e0e0;
+	transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.dashboard-cards .card:hover {
+	transform: translateY(-5px);
+	box-shadow: 0 0.5rem 1.5rem rgba(0, 0, 0, 0.1);
+}
+
+.dashboard-cards .card h2 {
+	font-size: 1.2rem;
+	margin-bottom: 0.5rem;
+	color: #4a4a4a;
+	letter-spacing: 0.05rem;
+	font-weight: 600;
+}
+
+.dashboard-cards .card p {
+	font-size: 1.6rem;
+	font-weight: 700;
+	color: #007bff;
+}
+
+@media ( max-width : 768px) {
+	.dashboard-cards {
+		grid-template-columns: 1fr 1fr;
+	}
+}
+
+@media ( max-width : 480px) {
+	.dashboard-cards {
+		grid-template-columns: 1fr;
+	}
+}
+
+#welcome_admin {
+	background-color: #eef1f5;
+	padding: 2rem;
+	margin: 1rem 0;
+	border-radius: 0.75rem;
+	box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.05);
+	text-align: center;
+	color: #2f4050;
+}
+
+#welcome_admin_name {
+	display: flex;
+	width: 100%;
+	height: 100%;
+	justify-content: center;
+	align-items: center;
+	gap: 1rem;
+}
+
+#welcome_admin h2 {
+	font-size: 2rem;
+	margin-bottom: 0.75rem;
+	font-weight: 700;
+}
+
+#welcome_admin p {
+	font-size: 1.1rem;
+	color: #555;
+	line-height: 1.6;
+	max-width: 600px;
+	margin: 0 auto;
+}
+
+/* ***************** */
+@media ( min-width : 48rem) {
+	.sidebar {
+		left: 0;
+	}
+	.sidebar.closed {
+		left: calc(-1 * var(--sidebar-width));
+	}
+	.main-content.sidebar-open {
+		margin-left: var(--sidebar-width);
+		width: calc(100% - var(--sidebar-width));
+	}
+}
+</style>
+</head>
+
+<body>
+
+	<div class="hamburger" id="hamburger" aria-label="Toggle navigation"
+		role="button" tabindex="0">
+		<div></div>
+		<div></div>
+		<div></div>
+	</div>
+
+	<aside class="sidebar open" id="sidebar" role="navigation"
+		aria-label="Main navigation">
+		<h2>Admin Panel</h2>
+		<nav>
+			<a th:href="@{/admin/dashboard}" class="active">Dashboard</a> <a
+				th:href="@{/admin/employeeList}">Employees</a> <a
+				th:href="@{/admin/departmentList}">Departments</a> <a
+				th:href="@{/admin/Settings}">Settings</a> <a
+				th:href="@{/admin/logout}">Logout</a>
+		</nav>
+	</aside>
+
+	<main class="main-content sidebar-open" id="mainContent">
+		<h1>Employee Management</h1>
+
+		<section id="welcome_admin">
+
+			<div id="welcome_admin_name">
+				<h2>Welcome</h2>
+				<h2 th:text="${adminUsername}"></h2>
+			</div>
+
+			<p>Empower your team by managing employee records, projects, and
+				attendance seamlessly. Stay informed and take actions that drive
+				productivity and growth within your organization.</p>
+		</section>
+
+
+		<section class="dashboard-cards">
+			<div class="card">
+				<h2>Total Employees</h2>
+				<p th:text="${totalEmployees}">45</p>
+			</div>
+			<div class="card">
+				<h2>Departments</h2>
+				<p th:text="${totalDepartment}">4</p>
+			</div>
+			<div class="card">
+				<h2>Projects</h2>
+				<p th:text="${totalProject}">12</p>
+			</div>
+			<div class="card">
+				<h2>Attendance</h2>
+				<p th:text="${attendanceToday}">38 Present</p>
+			</div>
+		</section>
+
+		<div style="text-align: right; margin: 1rem;">
+			<a th:href="@{/admin/addEmployee}" class="add-employee-btn"
+				style="display: inline-block; background-color: #1abc9c; color: white; padding: 0.6rem 1.2rem; border-radius: 0.5rem; font-weight: bold; text-decoration: none; transition: background-color 0.3s ease;">+
+				Add Employee</a>
+		</div>
+
+	</main>
+
+	<script>
+    const hamburger = document.getElementById('hamburger');
+    const sidebar = document.getElementById('sidebar');
+    const mainContent = document.getElementById('mainContent');
+
+    function toggleSidebar() {
+      hamburger.classList.toggle('active');
+      if (window.innerWidth >= 768) {
+        if (sidebar.classList.contains('open')) {
+          sidebar.classList.remove('open');
+          sidebar.classList.add('closed');
+          mainContent.classList.remove('sidebar-open');
+        } else {
+          sidebar.classList.add('open');
+          sidebar.classList.remove('closed');
+          mainContent.classList.add('sidebar-open');
+        }
+      } else {
+        sidebar.classList.toggle('open');
+      }
+    }
+
+    hamburger.addEventListener('click', toggleSidebar);
+
+    window.addEventListener('click', (e) => {
+      if (window.innerWidth < 768) {
+        if (!sidebar.contains(e.target) && !hamburger.contains(e.target)) {
+          sidebar.classList.remove('open');
+          hamburger.classList.remove('active');
+        }
+      }
+    });
+
+    hamburger.addEventListener('keydown', (e) => {
+      if (e.key === 'Enter' || e.key === ' ') {
+        e.preventDefault();
+        toggleSidebar();
+      }
+    });
+    
+  </script>
+
+</body>
+
+</html>

@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Employee Management Admin Panel - Hamburger Menu</title>
+<link rel="stylesheet" th:href="@{/styles/adminDashboard.css}">
+</head>
+<body>
+
+	<div class="hamburger" id="hamburger" aria-label="Toggle navigation"
+		role="button" tabindex="0">
+		<div></div>
+		<div></div>
+		<div></div>
+	</div>
+
+	<aside class="sidebar open" id="sidebar" role="navigation"
+		aria-label="Main navigation">
+		<h2>Admin Panel</h2>
+		<nav>
+			<a th:href="@{/admin/dashboard}">Dashboard</a>
+			<a th:href="@{/admin/employeeList}" class="active">Employees</a> 
+			<a th:href="@{/admin/departmentList}">Departments</a> 
+			<a th:href="@{/admin/Settings}">Settings</a> 
+			<a th:href="@{/admin/logout}">Logout</a> 
+		</nav>
+	</aside>
+
+	<main class="main-content sidebar-open" id="mainContent">
+		<h1>Employee Management</h1>
+
+		<div style="text-align: right; margin: 1rem;">
+			<a th:href="@{/admin/addEmployee}" class="add-employee-btn"
+				style="display: inline-block; background-color: #1abc9c; color: white; padding: 0.6rem 1.2rem; border-radius: 0.5rem; font-weight: bold; text-decoration: none; transition: background-color 0.3s ease;">+
+				Add Employee</a>
+		</div>
+
+		<table>
+			<thead>
+				<tr>
+					<th>ID</th>
+					<th>Name</th>
+					<th>Position</th>
+					<th>Department</th>
+					<th>Salary</th>
+					<th>Email</th>
+					<th>Phone</th>
+					<th>Actions</th>
+				</tr>
+			</thead>
+			<tbody>
+				<tr th:each="employee : ${employees}">
+					<td th:text="${employee.id}">EMPXXX</td>
+					<td th:text="${employee.name}">John Doe</td>
+					<td th:text="${employee.position}">Developer</td>
+					<td th:text="${employee.department}">IT</td>
+					<td th:text="${employee.salary}">00.00</td>
+					<td th:text="${employee.email}">john@example.com</td>
+					<td th:text="${employee.phn}">9999999999</td>
+					<td>
+						<a th:href="@{'/employees/edit/' + ${employee.id}}">
+								<button class="btn btn-edit">Edit</button>
+						</a> 
+						<a th:href="@{'/employees/delete/' + ${employee.id}}" onclick="return confirm('Are you sure?');">
+								<button class="btn btn-delete">Delete</button>
+						</a>
+					</td>
+				</tr>
+			</tbody>
+		</table>
+	</main>
+
+	<script>
+    const hamburger = document.getElementById('hamburger');
+    const sidebar = document.getElementById('sidebar');
+    const mainContent = document.getElementById('mainContent');
+
+    function toggleSidebar() {
+      hamburger.classList.toggle('active');
+      if (window.innerWidth >= 768) {
+        if (sidebar.classList.contains('open')) {
+          sidebar.classList.remove('open');
+          sidebar.classList.add('closed');
+          mainContent.classList.remove('sidebar-open');
+        } else {
+          sidebar.classList.add('open');
+          sidebar.classList.remove('closed');
+          mainContent.classList.add('sidebar-open');
+        }
+      } else {
+        sidebar.classList.toggle('open');
+      }
+    }
+
+    hamburger.addEventListener('click', toggleSidebar);
+
+    window.addEventListener('click', (e) => {
+      if (window.innerWidth < 768) {
+        if (!sidebar.contains(e.target) && !hamburger.contains(e.target)) {
+          sidebar.classList.remove('open');
+          hamburger.classList.remove('active');
+        }
+      }
+    });
+
+    hamburger.addEventListener('keydown', (e) => {
+      if (e.key === 'Enter' || e.key === ' ') {
+        e.preventDefault();
+        toggleSidebar();
+      }
+    });
+  </script>
+
+</body>
+</html>

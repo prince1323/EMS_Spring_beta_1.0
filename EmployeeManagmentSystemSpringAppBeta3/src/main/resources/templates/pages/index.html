@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Employee Management System</title>
+<link rel="stylesheet" th:href="@{/styles/index.css}">
+</head>
+<body>
+
+	<div class="container">
+		<h1>Employee Management System</h1>
+		<p>Welcome to the Employee Management System. Manage your employee
+			records, track performance, and ensure smooth operations within your
+			organization. Get started by logging in as an Admin or Employee.</p>
+	
+		 <a th:href="@{/admin}" class="btn">Admin Login</a>
+		 <a th:href="@{/employee}" class="btn">Employee Login</a>
+
+		<div class="footer">&copy; 2025 Prince Pandey. All rights reserved.</div>
+	</div>
+
+</body>
+</html>

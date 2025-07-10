@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Department Management - Admin Panel</title>
+  <link rel="stylesheet" th:href="@{/styles/adminDepartmentList.css}">
+</head>
+<body>
+
+  <div class="hamburger" id="hamburger" aria-label="Toggle navigation" role="button" tabindex="0">
+    <div></div>
+    <div></div>
+    <div></div>
+  </div>
+
+  <aside class="sidebar open" id="sidebar" role="navigation" aria-label="Main navigation">
+    <h2>Admin Panel</h2>
+    <nav>
+      <a th:href="@{/admin/dashboard}">Dashboard</a>
+      <a th:href="@{/admin/employeeList}">Employees</a>
+      <a th:href="@{/admin/departmentList}" class="active">Departments</a>
+      <a th:href="@{/admin/settings}">Settings</a>
+      <a th:href="@{/admin/logout}">Logout</a>
+    </nav>
+  </aside>
+
+  <main class="main-content sidebar-open" id="mainContent">
+    <h1>Department Management</h1>
+
+    <table>
+      <thead>
+        <tr class="heading_detp">
+          <th>ID</th>
+          <th>Name</th>
+          <th>Active Projects</th>
+          <th>Completed Projects</th>
+          <th>Active Employees</th>
+          <th>Actions</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr th:each="dept : ${departments}">
+          <td th:text="${dept.id}">D001</td>
+          <td th:text="${dept.name}">IT</td>
+          <td th:text="${dept.activeProjects}">2</td>
+          <td th:text="${dept.completedProjects}">5</td>
+          <td th:text="${dept.activeEmployees}">12</td>
+          <td class="department_activity">
+            <a th:href="@{'/departments/viewEmployees/' + ${dept.id}}">
+              <button class="btn btn-view">View Employees</button>
+            </a>
+            <a th:href="@{'/departments/edit/' + ${dept.id}}">
+              <button class="btn btn-edit">Edit</button>
+            </a>
+            <a th:href="@{'/departments/delete/' + ${dept.id}}" onclick="return confirm('Are you sure?');">
+              <button class="btn btn-delete">Delete</button>
+            </a>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </main>
+
+  <script>
+    const hamburger = document.getElementById('hamburger');
+    const sidebar = document.getElementById('sidebar');
+    const mainContent = document.getElementById('mainContent');
+
+    function toggleSidebar() {
+      hamburger.classList.toggle('active');
+      if (window.innerWidth >= 768) {
+        sidebar.classList.toggle('open');
+        sidebar.classList.toggle('closed');
+        mainContent.classList.toggle('sidebar-open');
+      } else {
+        sidebar.classList.toggle('open');
+      }
+    }
+
+    hamburger.addEventListener('click', toggleSidebar);
+
+    window.addEventListener('click', (e) => {
+      if (window.innerWidth < 768 && !sidebar.contains(e.target) && !hamburger.contains(e.target)) {
+        sidebar.classList.remove('open');
+        hamburger.classList.remove('active');
+      }
+    });
+
+    hamburger.addEventListener('keydown', (e) => {
+      if (e.key === 'Enter' || e.key === ' ') {
+        e.preventDefault();
+        toggleSidebar();
+      }
+    });
+  </script>
+
+</body>
+</html>
